@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRESS_DB: comparision_tool_db
+      POSTGRESS_USER: postges
+      POSTGRES_PASSWORD: joseesgay2003
+
+  backend:
+    build: ./  # Ruta al directorio de tu aplicación Django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"  # Puertos externos:internos
+    depends_on:
+      - db
+
+  frontend:
+    build: ./comparision_tool_client  # Ruta al directorio de tu aplicación Next.js
+    command: npm run dev
+    volumes:
+      - ./comparision_tool_client:/app  # Actualizado: directorio de la aplicación Next.js
+    ports:
+      - "9000:9000"
